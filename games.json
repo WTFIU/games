@@ -1,5 +1,12 @@
-{
-  "title": "Slope",
-  "url": "https://ubg365.github.io/slope/",
-  "image": "https://play-lh.googleusercontent.com/0slope-thumbnail"
-}
+[
+  {
+    "title": "Slope",
+    "url": "games/slope/index.html",
+    "image": "games/slope/thumb.png"
+  },
+  {
+    "title": "OvO (embed)",
+    "url": "https://www.bubbleshooter.net/embed.php?id=1366",
+    "image": "games/ovo/thumb.png"
+  }
+]
