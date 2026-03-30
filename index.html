@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GameHub</title>
+  <title>GameHub - Home</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
-    /* Reset & basics */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Inter', sans-serif;
@@ -17,7 +16,6 @@
       flex-direction: column;
     }
 
-    /* Header */
     header {
       padding: 20px;
       text-align: center;
@@ -27,159 +25,100 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.3);
     }
 
-    /* Search bar */
-    .search-bar {
-      padding: 15px;
-      text-align: center;
-      background: #0f172a;
-    }
-    .search-bar input {
-      width: 80%;
-      max-width: 400px;
-      padding: 10px;
-      border-radius: 10px;
-      border: none;
-      outline: none;
-      font-size: 1rem;
-      transition: box-shadow 0.2s;
-    }
-    .search-bar input:focus {
-      box-shadow: 0 0 10px #3b82f6;
-    }
-
-    /* Game grid */
-    .games {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
+    main {
       padding: 20px;
       flex: 1;
     }
 
-    .game-card {
+    h2 {
+      margin-bottom: 15px;
+    }
+
+    .section {
+      margin-bottom: 40px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
       background: #1e293b;
       border-radius: 16px;
       overflow: hidden;
+      text-align: center;
       cursor: pointer;
       transition: transform 0.2s, box-shadow 0.2s;
+      padding-bottom: 10px;
     }
-    .game-card:hover {
+
+    .card:hover {
       transform: translateY(-5px);
       box-shadow: 0 10px 25px rgba(0,0,0,0.4);
     }
-    .game-card img {
+
+    .card img {
       width: 100%;
       height: 120px;
       object-fit: cover;
-    }
-    .game-card h3 {
-      padding: 10px;
-      font-size: 1.1rem;
-      text-align: center;
+      border-bottom: 1px solid #0f172a;
     }
 
-    /* Game iframe overlay */
-    .game-frame {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.95);
-      z-index: 999;
-      flex-direction: column;
+    .card h3 {
+      margin-top: 10px;
+      font-size: 1rem;
     }
-    .game-frame iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-    .close-btn {
-      position: absolute;
-      top: 15px;
-      right: 20px;
-      background: #ef4444;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 600;
-      z-index: 1000;
-      transition: background 0.2s;
-    }
-    .close-btn:hover {
-      background: #dc2626;
-    }
-
   </style>
 </head>
 <body>
 
 <header>🎮 GameHub</header>
-<div class="search-bar">
-  <input type="text" id="search" placeholder="Search games..." onkeyup="searchGames()">
-</div>
-<div class="games" id="gameList"></div>
-<div class="game-frame" id="gameFrame">
-  <button class="close-btn" onclick="closeGame()">Close</button>
-  <iframe id="frame"></iframe>
-</div>
+<main>
 
-<script>
-  let allGames = [];
+  <!-- Games Section -->
+  <div class="section">
+    <h2>Play Games</h2>
+    <div class="cards">
+      <a href="games.html" class="card">
+        <img src="assets/images/games-thumb.png" alt="Games">
+        <h3>All Games</h3>
+      </a>
+    </div>
+  </div>
 
-  async function loadGames() {
-    try {
-      const res = await fetch("https://api.github.com/repos/WTFIU/games/contents/games");
-      const data = await res.json();
+  <!-- Sports Section -->
+  <div class="section">
+    <h2>Watch Sports</h2>
+    <div class="cards">
+      <a href="sports/MotoGP.html" target="_blank" class="card">
+        <img src="assets/images/motogp.png" alt="MotoGP">
+        <h3>MotoGP</h3>
+      </a>
+      <a href="sports/f1.html" target="_blank" class="card">
+        <img src="assets/images/f1.png" alt="F1">
+        <h3>F1</h3>
+      </a>
+    </div>
+  </div>
 
-      const games = data
-        .filter(item => item.type === "dir")
-        .map(folder => ({
-          title: folder.name.replace(/-/g, ' '),
-          url: `games/${folder.name}/index.html`,
-          image: `games/${folder.name}/thumb.png`
-        }));
+  <!-- Tutorials Section -->
+  <div class="section">
+    <h2>Tutorials</h2>
+    <div class="cards">
+      <a href="tutorials/chromebook-reset.html" target="_blank" class="card">
+        <img src="assets/images/tutorial.png" alt="Tutorial">
+        <h3>Reset Chromebook</h3>
+      </a>
+      <a href="tutorials/js-tricks.html" target="_blank" class="card">
+        <img src="assets/images/tutorial.png" alt="Tutorial">
+        <h3>JS Tricks</h3>
+      </a>
+    </div>
+  </div>
 
-      allGames = games;
-      displayGames(allGames);
-    } catch (err) {
-      console.error("Failed to load games from repo", err);
-    }
-  }
-
-  function displayGames(games) {
-    const container = document.getElementById('gameList');
-    container.innerHTML = '';
-    games.forEach(game => {
-      const card = document.createElement('div');
-      card.className = 'game-card';
-      card.onclick = () => openGame(game.url);
-      card.innerHTML = `<img src='${game.image}' alt='${game.title}'><h3>${game.title}</h3>`;
-      container.appendChild(card);
-    });
-  }
-
-  function openGame(url) {
-    document.getElementById('gameFrame').style.display = 'flex';
-    document.getElementById('frame').src = url;
-  }
-
-  function closeGame() {
-    document.getElementById('gameFrame').style.display = 'none';
-    document.getElementById('frame').src = '';
-  }
-
-  function searchGames() {
-    const input = document.getElementById('search').value.toLowerCase();
-    const filtered = allGames.filter(game => game.title.toLowerCase().includes(input));
-    displayGames(filtered);
-  }
-
-  loadGames();
-</script>
+</main>
 
 </body>
 </html>
