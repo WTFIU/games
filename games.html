@@ -1,1 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GameHub - Games</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    /* Reset & basics */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
+    /* Header */
+    header {
+      padding: 20px;
+      text-align: center;
+      background: #1e293b;
+      font-size: 1.8rem;
+      font-weight: 600;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+
+    /* Search bar */
+    .search-bar {
+      padding: 15px;
+      text-align: center;
+      background: #0f172a;
+    }
+    .search-bar input {
+      width: 80%;
+      max-width: 400px;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      transition: box-shadow 0.2s;
+    }
+    .search-bar input:focus {
+      box-shadow: 0 0 10px #3b82f6;
+    }
+
+    /* Game grid */
+    .games {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      flex: 1;
+    }
+
+    .game-card {
+      background: #1e293b;
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .game-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    }
+    .game-card img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+    }
+    .game-card h3 {
+      padding: 10px;
+      font-size: 1.1rem;
+      text-align: center;
+    }
+
+    /* Game iframe overlay */
+    .game-frame {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.95);
+      z-index: 999;
+      flex-direction: column;
+    }
+    .game-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      z-index: 1000;
+      transition: background 0.2s;
+    }
+    .close-btn:hover {
+      background: #dc2626;
+    }
+  </style>
+</head>
+<body>
+
+<header>🎮 GameHub - Games</header>
+<div class="search-bar">
+  <input type="text" id="search" placeholder="Search games..." onkeyup="searchGames()">
+</div>
+
+<div class="games" id="gameList"></div>
+
+<div class="game-frame" id="gameFrame">
+  <button class="close-btn" onclick="closeGame()">Close</button>
+  <iframe id="frame"></iframe>
+</div>
+
+<script>
+  // All playable games array
+  const allGames = [
+    { title: "Tetris", url: "games/Tetris/index.html", image: "games/Tetris/thumb.png" },
+    { title: "Ovo", url: "games/ovo/index.html", image: "games/ovo/thumb.png" },
+    { title: "Slope", url: "games/slope/index.html", image: "games/slope/thumb.png" },
+    { title: "Calculator", url: "calculator.html", image: "assets/images/calculator.png" }
+  ];
+
+  function displayGames(games) {
+    const container = document.getElementById('gameList');
+    container.innerHTML = '';
+    games.forEach(game => {
+      const card = document.createElement('div');
+      card.className = 'game-card';
+      card.onclick = () => openGame(game.url);
+      card.innerHTML = `<img src='${game.image}' alt='${game.title}'><h3>${game.title}</h3>`;
+      container.appendChild(card);
+    });
+  }
+
+  function openGame(url) {
+    document.getElementById('gameFrame').style.display = 'flex';
+    document.getElementById('frame').src = url;
+  }
+
+  function closeGame() {
+    document.getElementById('gameFrame').style.display = 'none';
+    document.getElementById('frame').src = '';
+  }
+
+  function searchGames() {
+    const input = document.getElementById('search').value.toLowerCase();
+    const filtered = allGames.filter(game => game.title.toLowerCase().includes(input));
+    displayGames(filtered);
+  }
+
+  // Initial display
+  displayGames(allGames);
+</script>
+
+</body>
+</html>
